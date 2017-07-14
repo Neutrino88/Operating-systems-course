@@ -1,0 +1,11 @@
+#!/bin/bash
+
+mod=1
+count=0
+while [[ "$mod" -ne "0" ]] ;do
+    read num
+    let "count = count + 1"
+    let "mod = num % 2"
+done
+
+echo "$count"
