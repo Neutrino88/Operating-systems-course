@@ -1,0 +1,56 @@
+# 1 
+fdisk /dev/sda
+	n     - new
+	p     - primary
+	3     - partition
+	+500M - size
+	w     - write
+
+# 2 
+mkfs.ext3 -b 1024 /dev/sda3
+
+# 3 
+dumpe2fs -h /dev/sda3
+
+# 4 
+tune2fs -i 2m -C 2 /dev/sda3
+
+# 5 
+mkdir /mnt/newdisk
+mount -t ext3 /dev/sda3 /mnt/newdisk
+
+# 6
+ln -s /mnt/newdisk ~/newdisk
+
+# 7
+mkdir ~/newdisk/mydir
+
+# 8
+Added in file /etc/fstab a line "/dev/sda3 /mnt/newdisk ext3 noexec,noatime 0 0"
+reboot
+
+# 9
+umount /dev/sda3
+fdisk /dev/sda
+    d      - delete
+    3      - partition
+    n      - new	
+    p      - primary
+    3      - partition
+    +1024M - size
+    w      - write
+reboot
+resize2fs /dev/sda3
+df -h
+
+# 10
+e2fsck -n /dev/sda3
+
+# 11
+mkdir /mnt/share
+mount.cifs //rain/tmp /mnt/share -o user=astd589 password=shoo6Ahg6
+
+# 12
+Added in file /etc/fstab a line "//rain/tmp /mnt/share cifs credentials=/etc/rain/passwd,ro 0 0"
+( //rain/tmp /mnt/share	cifs user=myuser,password=mypassword,ro 0 0 )
+reboot
